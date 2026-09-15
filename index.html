@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Campo Harmônico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="wheel-container">
+            <!-- A roda que vai girar com as notas -->
+            <div id="wheel" class="wheel"></div>
+            
+            <!-- A máscara cinza que fica por cima (como na sua foto) -->
+            <div class="mask"></div>
+            
+            <!-- Os indicadores de graus impressos na máscara -->
+            <div class="degree-labels">
+                <span class="deg-iv">IV</span>
+                <span class="deg-i">I</span>
+                <span class="deg-v">V</span>
+            </div>
+            <div class="degree-labels-minor">
+                <span class="deg-ii">ii</span>
+                <span class="deg-vi">vi</span>
+                <span class="deg-iii">iii</span>
+            </div>
+        </div>
+        <p class="instruction">Use as setas &larr; e &rarr; do notebook para trocar de tom.</p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
