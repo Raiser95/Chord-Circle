@@ -3,28 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculador de Campo Harmônico</title>
+    <title>Painel de Campo Harmônico</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <div class="wheel-container">
-            <!-- Roda giratória -->
-            <div id="wheel" class="wheel"></div>
+    <div class="container">
+        <header>
+            <h1 id="current-key">Tom: C</h1>
+            <p class="instruction">Use as setas &larr; e &rarr; para trocar de tom</p>
+        </header>
+
+        <div class="harmonic-grid">
+            <!-- Linha 1: Acordes Maiores -->
+            <div class="chord-box" id="box-iv">
+                <span class="degree">IV</span>
+                <span class="chord">F</span>
+            </div>
+            <div class="chord-box tonic" id="box-i">
+                <span class="degree">I</span>
+                <span class="chord">C</span>
+            </div>
+            <div class="chord-box" id="box-v">
+                <span class="degree">V</span>
+                <span class="chord">G</span>
+            </div>
             
-            <!-- Máscara cinza vazada -->
-            <div class="mask"></div>
-            
-            <!-- Numerais romanos fixos na máscara -->
-            <div class="labels">
-                <span class="deg-iv">IV</span>
-                <span class="deg-v">V</span>
-                <span class="deg-ii">II</span>
-                <span class="deg-iii">III</span>
-                <span class="deg-vi-vii">VI / VII</span>
+            <!-- Linha 2: Acordes Menores -->
+            <div class="chord-box minor" id="box-ii">
+                <span class="degree">ii</span>
+                <span class="chord">Dm</span>
+            </div>
+            <div class="chord-box minor" id="box-vi">
+                <span class="degree">vi</span>
+                <span class="chord">Am</span>
+            </div>
+            <div class="chord-box minor" id="box-iii">
+                <span class="degree">iii</span>
+                <span class="chord">Em</span>
+            </div>
+
+            <!-- Linha 3: Acorde Diminuto -->
+            <div class="chord-box dim" id="box-vii">
+                <span class="degree">vii°</span>
+                <span class="chord">B°</span>
             </div>
         </div>
-        <p class="instruction">Use as setas &larr; e &rarr; do notebook para trocar de tom.</p>
     </div>
     <script src="script.js"></script>
 </body>
