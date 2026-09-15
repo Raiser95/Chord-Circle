@@ -1,45 +1,84 @@
-const notes = [
-    { major: 'C', minor: 'Am', dim: 'B°' },
-    { major: 'G', minor: 'Em', dim: 'F#°' },
-    { major: 'D', minor: 'Bm', dim: 'C#°' },
-    { major: 'A', minor: 'F#m', dim: 'G#°' },
-    { major: 'E', minor: 'C#m', dim: 'D#°' },
-    { major: 'B', minor: 'G#m', dim: 'A#°' },
-    { major: 'Gb', minor: 'Ebm', dim: 'F°' },
-    { major: 'Db', minor: 'Bbm', dim: 'C°' },
-    { major: 'Ab', minor: 'Fm', dim: 'G°' },
-    { major: 'Eb', minor: 'Cm', dim: 'D°' },
-    { major: 'Bb', minor: 'Gm', dim: 'A°' },
-    { major: 'F', minor: 'Dm', dim: 'E°' }
-];
-
-const wheel = document.getElementById('wheel');
-let currentRotation = 0; 
-
-notes.forEach((note, index) => {
-    const slice = document.createElement('div');
-    slice.className = 'slice';
-    slice.style.transform = `rotate(${index * 30}deg)`;
-
-    // Estrutura simplificada para o CSS alinhar perfeitamente
-    slice.innerHTML = `
-        <span class="major">${note.major}</span>
-        <span class="minor">${note.minor}</span>
-        <span class="dim">${note.dim}</span>
-    `;
-    wheel.appendChild(slice);
-});
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') {
-        currentRotation -= 30; 
-        updateWheel();
-    } else if (event.key === 'ArrowLeft') {
-        currentRotation += 30; 
-        updateWheel();
-    }
-});
-
-function updateWheel() {
-    wheel.style.transform = `rotate(${currentRotation}deg)`;
+body {
+    background-color: #f4f4f5; /* Cinza bem claro */
+    color: #1a1a1a;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
+
+.container {
+    text-align: center;
+    background: #ffffff;
+    padding: 40px 60px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+h1 {
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.instruction {
+    color: #71717a;
+    font-size: 14px;
+}
+
+.harmonic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.chord-box {
+    background: #f4f4f5;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Destaque para a Tônica (Centro) */
+.chord-box.tonic {
+    background: #1a1a1a;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.chord-box.tonic .degree {
+    color: #a1a1aa;
+}
+
+/* O diminuto ocupa a coluna do meio na linha de baixo */
+#box-vii {
+    grid-column: 2; 
+}
+
+.degree {
+    font-size: 14px;
+    font-weight: bold;
+    color: #71717a;
+    margin-bottom: 8px;
+}
+
+.chord {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.minor .chord { font-size: 24px; }
+.dim .chord { font-size: 20px; }
