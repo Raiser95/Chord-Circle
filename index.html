@@ -3,49 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Campo Harmônico</title>
+    <title>Painel Musical</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 id="current-key">Tom: C</h1>
-            <p class="instruction">Use as setas &larr; e &rarr; para trocar de tom</p>
-        </header>
+    <button id="theme-toggle">🌙 Modo Escuro</button>
 
-        <div class="harmonic-grid">
-            <!-- Linha 1: Acordes Maiores -->
-            <div class="chord-box" id="box-iv">
-                <span class="degree">IV</span>
-                <span class="chord">F</span>
-            </div>
-            <div class="chord-box tonic" id="box-i">
-                <span class="degree">I</span>
-                <span class="chord">C</span>
-            </div>
-            <div class="chord-box" id="box-v">
-                <span class="degree">V</span>
-                <span class="chord">G</span>
-            </div>
-            
-            <!-- Linha 2: Acordes Menores -->
-            <div class="chord-box minor" id="box-ii">
-                <span class="degree">ii</span>
-                <span class="chord">Dm</span>
-            </div>
-            <div class="chord-box minor" id="box-vi">
-                <span class="degree">vi</span>
-                <span class="chord">Am</span>
-            </div>
-            <div class="chord-box minor" id="box-iii">
-                <span class="degree">iii</span>
-                <span class="chord">Em</span>
-            </div>
+    <div class="main-wrapper">
+        <!-- Lado Esquerdo: Campo Harmônico -->
+        <div class="panel chord-panel">
+            <header>
+                <h1 id="current-key">Tom: C</h1>
+                <p class="instruction">Use as setas &larr; e &rarr; para trocar</p>
+            </header>
 
-            <!-- Linha 3: Acorde Diminuto -->
-            <div class="chord-box dim" id="box-vii">
-                <span class="degree">vii°</span>
-                <span class="chord">B°</span>
+            <div class="harmonic-grid">
+                <div class="chord-box" id="box-iv"><span class="degree">IV</span><span class="chord">F</span></div>
+                <div class="chord-box tonic" id="box-i"><span class="degree">I</span><span class="chord">C</span></div>
+                <div class="chord-box" id="box-v"><span class="degree">V</span><span class="chord">G</span></div>
+                
+                <div class="chord-box minor" id="box-ii"><span class="degree">ii</span><span class="chord">Dm</span></div>
+                <div class="chord-box minor" id="box-vi"><span class="degree">vi</span><span class="chord">Am</span></div>
+                <div class="chord-box minor" id="box-iii"><span class="degree">iii</span><span class="chord">Em</span></div>
+
+                <div class="chord-box dim" id="box-vii"><span class="degree">vii°</span><span class="chord">B°</span></div>
+            </div>
+        </div>
+
+        <!-- Lado Direito: Pentatônicas -->
+        <div class="panel penta-panel">
+            <h2>Pentatônicas (Shape 1)</h2>
+            <p class="instruction">Tônica na 6ª Corda</p>
+
+            <div class="penta-container">
+                <!-- Pentatônica Maior -->
+                <div class="penta-box">
+                    <h3 id="penta-major-title">Maior (C) - Casa 8</h3>
+                    <div class="fretboard">
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
+                        <div class="string tonic-string"><div class="dot tonic-dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
+                    </div>
+                </div>
+
+                <!-- Pentatônica Menor -->
+                <div class="penta-box">
+                    <h3 id="penta-minor-title">Menor (Am) - Casa 5</h3>
+                    <div class="fretboard">
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
+                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
+                        <div class="string tonic-string"><div class="dot tonic-dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
