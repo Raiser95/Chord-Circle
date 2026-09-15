@@ -1,50 +1,86 @@
-// As 12 notas do Círculo de Quintas
-const notes = [
-    { major: 'C', minor: 'Am', dim: 'B°' },
-    { major: 'G', minor: 'Em', dim: 'F#°' },
-    { major: 'D', minor: 'Bm', dim: 'C#°' },
-    { major: 'A', minor: 'F#m', dim: 'G#°' },
-    { major: 'E', minor: 'C#m', dim: 'D#°' },
-    { major: 'B', minor: 'G#m', dim: 'A#°' },
-    { major: 'Gb', minor: 'Ebm', dim: 'F°' },
-    { major: 'Db', minor: 'Bbm', dim: 'C°' },
-    { major: 'Ab', minor: 'Fm', dim: 'G°' },
-    { major: 'Eb', minor: 'Cm', dim: 'D°' },
-    { major: 'Bb', minor: 'Gm', dim: 'A°' },
-    { major: 'F', minor: 'Dm', dim: 'E°' }
-];
+body {
+    background-color: #e5e5e5;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
 
-const wheel = document.getElementById('wheel');
-let currentRotation = 0; // Começa em Dó (C)
+.app-container {
+    text-align: center;
+}
 
-// Monta as fatias da roda automaticamente
-notes.forEach((note, index) => {
-    const slice = document.createElement('div');
-    slice.className = 'slice';
-    // Cada nota fica a 30 graus de distância da outra (360 / 12)
-    slice.style.transform = `rotate(${index * 30}deg)`;
+.wheel-container {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background-color: #333;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
 
-    slice.innerHTML = `
-        <div class="note-content">
-            <span class="major">${note.major}</span>
-            <span class="minor">${note.minor}</span>
-            <span class="dim">${note.dim}</span>
-        </div>
-    `;
-    wheel.appendChild(slice);
-});
+.wheel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
 
-// Fica "escutando" o teclado
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') {
-        currentRotation -= 30; // Gira para a direita (avança no ciclo)
-        updateWheel();
-    } else if (event.key === 'ArrowLeft') {
-        currentRotation += 30; // Gira para a esquerda (volta no ciclo)
-        updateWheel();
-    }
-});
+.slice {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80px;
+    height: 50%;
+    margin-left: -40px; /* Metade da largura para centralizar perfeitamente */
+    transform-origin: bottom center;
+}
 
-function updateWheel() {
-    wheel.style.transform = `rotate(${currentRotation}deg)`;
+/* Posicionamento exato para criar anéis perfeitos */
+.major, .minor, .dim {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.major { top: 20px; font-size: 24px; font-weight: bold; }
+.minor { top: 75px; font-size: 16px; color: #ccc; }
+.dim { top: 120px; font-size: 13px; color: #999; }
+
+.mask {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    background: conic-gradient(from -45deg, transparent 0deg, transparent 90deg, #84939f 90deg, #84939f 360deg);
+    z-index: 10;
+}
+
+.labels {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 15;
+    font-family: 'Georgia', serif; /* Dá um toque clássico parecido com a impressão da foto */
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+/* Alinhamento dos graus em volta da janela transparente */
+.deg-iv { position: absolute; top: 40px; left: 45px; font-size: 18px; }
+.deg-v { position: absolute; top: 40px; right: 45px; font-size: 18px; }
+.deg-ii { position: absolute; top: 90px; left: 95px; font-size: 15px; }
+.deg-iii { position: absolute; top: 90px; right: 95px; font-size: 15px; }
+.deg-vi-vii { position: absolute; top: 135px; left: 50%; transform: translateX(-50%); font-size: 16px; }
+
+.instruction {
+    color: #555;
+    font-size: 14px;
+    letter-spacing: 0.5px;
 }
