@@ -1,86 +1,48 @@
-body {
-    background-color: #e5e5e5;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
+// Lista completa dos 12 tons seguindo o Ciclo de Quintas
+const harmonicFields = [
+    { key: 'C',  iv: 'F',  i: 'C',  v: 'G',  ii: 'Dm',  vi: 'Am',  iii: 'Em',  vii: 'B°' },
+    { key: 'G',  iv: 'C',  i: 'G',  v: 'D',  ii: 'Am',  vi: 'Em',  iii: 'Bm',  vii: 'F#°' },
+    { key: 'D',  iv: 'G',  i: 'D',  v: 'A',  ii: 'Em',  vi: 'Bm',  iii: 'F#m', vii: 'C#°' },
+    { key: 'A',  iv: 'D',  i: 'A',  v: 'E',  ii: 'Bm',  vi: 'F#m', iii: 'C#m', vii: 'G#°' },
+    { key: 'E',  iv: 'A',  i: 'E',  v: 'B',  ii: 'F#m', vi: 'C#m', iii: 'G#m', vii: 'D#°' },
+    { key: 'B',  iv: 'E',  i: 'B',  v: 'F#', ii: 'C#m', vi: 'G#m', iii: 'D#m', vii: 'A#°' },
+    { key: 'F#', iv: 'B',  i: 'F#', v: 'C#', ii: 'G#m', vi: 'D#m', iii: 'A#m', vii: 'E#°' },
+    { key: 'Db', iv: 'Gb', i: 'Db', v: 'Ab', ii: 'Ebm', vi: 'Bbm', iii: 'Fm',  vii: 'C°' },
+    { key: 'Ab', iv: 'Db', i: 'Ab', v: 'Eb', ii: 'Bbm', vi: 'Fm',  iii: 'Cm',  vii: 'G°' },
+    { key: 'Eb', iv: 'Ab', i: 'Eb', v: 'Bb', ii: 'Fm',  vi: 'Cm',  iii: 'Gm',  vii: 'D°' },
+    { key: 'Bb', iv: 'Eb', i: 'Bb', v: 'F',  ii: 'Cm',  vi: 'Gm',  iii: 'Dm',  vii: 'A°' },
+    { key: 'F',  iv: 'Bb', i: 'F',  v: 'C',  ii: 'Gm',  vi: 'Dm',  iii: 'Am',  vii: 'E°' }
+];
+
+let currentIndex = 0; // Começa em C (Dó)
+
+// Função que pega os dados da lista e joga na tela
+function updateUI() {
+    const field = harmonicFields[currentIndex];
+    
+    document.getElementById('current-key').textContent = `Tom: ${field.key}`;
+    
+    document.querySelector('#box-iv .chord').textContent = field.iv;
+    document.querySelector('#box-i .chord').textContent = field.i;
+    document.querySelector('#box-v .chord').textContent = field.v;
+    
+    document.querySelector('#box-ii .chord').textContent = field.ii;
+    document.querySelector('#box-vi .chord').textContent = field.vi;
+    document.querySelector('#box-iii .chord').textContent = field.iii;
+    
+    document.querySelector('#box-vii .chord').textContent = field.vii;
 }
 
-.app-container {
-    text-align: center;
-}
+// Troca de tom com as setas do teclado
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        currentIndex = (currentIndex + 1) % harmonicFields.length;
+        updateUI();
+    } else if (event.key === 'ArrowLeft') {
+        currentIndex = (currentIndex - 1 + harmonicFields.length) % harmonicFields.length;
+        updateUI();
+    }
+});
 
-.wheel-container {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    margin: 0 auto 30px;
-    border-radius: 50%;
-    background-color: #333;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-
-.wheel {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.slice {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 80px;
-    height: 50%;
-    margin-left: -40px; /* Metade da largura para centralizar perfeitamente */
-    transform-origin: bottom center;
-}
-
-/* Posicionamento exato para criar anéis perfeitos */
-.major, .minor, .dim {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    color: white;
-}
-
-.major { top: 20px; font-size: 24px; font-weight: bold; }
-.minor { top: 75px; font-size: 16px; color: #ccc; }
-.dim { top: 120px; font-size: 13px; color: #999; }
-
-.mask {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border-radius: 50%;
-    pointer-events: none;
-    background: conic-gradient(from -45deg, transparent 0deg, transparent 90deg, #84939f 90deg, #84939f 360deg);
-    z-index: 10;
-}
-
-.labels {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 15;
-    font-family: 'Georgia', serif; /* Dá um toque clássico parecido com a impressão da foto */
-    font-weight: bold;
-    color: #1a1a1a;
-}
-
-/* Alinhamento dos graus em volta da janela transparente */
-.deg-iv { position: absolute; top: 40px; left: 45px; font-size: 18px; }
-.deg-v { position: absolute; top: 40px; right: 45px; font-size: 18px; }
-.deg-ii { position: absolute; top: 90px; left: 95px; font-size: 15px; }
-.deg-iii { position: absolute; top: 90px; right: 95px; font-size: 15px; }
-.deg-vi-vii { position: absolute; top: 135px; left: 50%; transform: translateX(-50%); font-size: 16px; }
-
-.instruction {
-    color: #555;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-}
+// Carrega a primeira tela
+updateUI();
