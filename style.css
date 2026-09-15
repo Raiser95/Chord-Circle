@@ -1,91 +1,45 @@
-body {
-    background-color: #e5e5e5;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-}
+const notes = [
+    { major: 'C', minor: 'Am', dim: 'B°' },
+    { major: 'G', minor: 'Em', dim: 'F#°' },
+    { major: 'D', minor: 'Bm', dim: 'C#°' },
+    { major: 'A', minor: 'F#m', dim: 'G#°' },
+    { major: 'E', minor: 'C#m', dim: 'D#°' },
+    { major: 'B', minor: 'G#m', dim: 'A#°' },
+    { major: 'Gb', minor: 'Ebm', dim: 'F°' },
+    { major: 'Db', minor: 'Bbm', dim: 'C°' },
+    { major: 'Ab', minor: 'Fm', dim: 'G°' },
+    { major: 'Eb', minor: 'Cm', dim: 'D°' },
+    { major: 'Bb', minor: 'Gm', dim: 'A°' },
+    { major: 'F', minor: 'Dm', dim: 'E°' }
+];
 
-.app-container {
-    text-align: center;
-}
+const wheel = document.getElementById('wheel');
+let currentRotation = 0; 
 
-.wheel-container {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    margin: 0 auto 30px;
-    border-radius: 50%;
-    background-color: #333;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-}
+notes.forEach((note, index) => {
+    const slice = document.createElement('div');
+    slice.className = 'slice';
+    slice.style.transform = `rotate(${index * 30}deg)`;
 
-/* A roda interna que vai girar */
-.wheel {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); /* Animação suave */
-}
+    // Estrutura simplificada para o CSS alinhar perfeitamente
+    slice.innerHTML = `
+        <span class="major">${note.major}</span>
+        <span class="minor">${note.minor}</span>
+        <span class="dim">${note.dim}</span>
+    `;
+    wheel.appendChild(slice);
+});
 
-/* Cada fatia da roda (gerada pelo JavaScript) */
-.slice {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 90px;
-    height: 50%;
-    margin-left: -45px;
-    transform-origin: bottom center;
-    text-align: center;
-}
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        currentRotation -= 30; 
+        updateWheel();
+    } else if (event.key === 'ArrowLeft') {
+        currentRotation += 30; 
+        updateWheel();
+    }
+});
 
-.note-content {
-    padding-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    color: white;
-}
-
-.major { font-size: 24px; font-weight: bold; }
-.minor { font-size: 16px; color: #ccc; }
-.dim { font-size: 12px; color: #999; }
-
-/* A máscara que esconde o resto da roda */
-.mask {
-    position: absolute;
-    top: -2%; left: -2%; width: 104%; height: 104%;
-    border-radius: 50%;
-    pointer-events: none;
-    /* Isso cria o efeito da peça cinza com a janela vazada no topo */
-    background: conic-gradient(from -45deg, transparent 0deg, transparent 90deg, #84939f 90deg, #84939f 360deg);
-    z-index: 10;
-}
-
-/* Graus impressos na máscara */
-.degree-labels, .degree-labels-minor {
-    position: absolute;
-    width: 100%;
-    pointer-events: none;
-    z-index: 15;
-    font-weight: bold;
-    color: #1a1a1a;
-}
-
-.degree-labels { top: 90px; font-size: 18px; }
-.degree-labels-minor { top: 130px; font-size: 14px; }
-
-.deg-iv, .deg-ii { position: absolute; left: 60px; }
-.deg-i, .deg-vi { position: absolute; left: 168px; }
-.deg-v, .deg-iii { position: absolute; right: 60px; }
-
-.instruction {
-    color: #555;
-    font-size: 14px;
-    letter-spacing: 0.5px;
+function updateWheel() {
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
 }
