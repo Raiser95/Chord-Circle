@@ -1,84 +1,122 @@
+:root {
+    --bg-color: #f4f4f5;
+    --panel-bg: #ffffff;
+    --text-main: #1a1a1a;
+    --text-muted: #71717a;
+    --tonic-bg: #1a1a1a;
+    --tonic-text: #ffffff;
+    --fretboard-bg: #e4e4e7;
+    --string-color: #a1a1aa;
+}
+
+.dark-theme {
+    --bg-color: #121212;
+    --panel-bg: #1e1e1e;
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --tonic-bg: #f4f4f5;
+    --tonic-text: #1a1a1a;
+    --fretboard-bg: #27272a;
+    --string-color: #52525b;
+}
+
 body {
-    background-color: #f4f4f5; /* Cinza bem claro */
-    color: #1a1a1a;
+    background-color: var(--bg-color);
+    color: var(--text-main);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.container {
-    text-align: center;
-    background: #ffffff;
-    padding: 40px 60px;
+#theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--panel-bg);
+    color: var(--text-main);
+    border: 1px solid var(--text-muted);
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.main-wrapper {
+    display: flex;
+    gap: 30px;
+    max-width: 900px;
+}
+
+.panel {
+    background: var(--panel-bg);
+    padding: 30px 40px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    text-align: center;
 }
 
-header {
-    margin-bottom: 40px;
-}
+h1 { font-size: 32px; margin: 0 0 5px 0; }
+h2 { font-size: 22px; margin: 0 0 5px 0; }
+h3 { font-size: 16px; margin-bottom: 15px; color: var(--text-main); }
+.instruction { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
 
-h1 {
-    font-size: 32px;
-    margin: 0 0 10px 0;
-    font-weight: bold;
-    letter-spacing: -1px;
-}
-
-.instruction {
-    color: #71717a;
-    font-size: 14px;
-}
-
-.harmonic-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    max-width: 450px;
-    margin: 0 auto;
-}
-
+/* Grid de Acordes */
+.harmonic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
 .chord-box {
-    background: #f4f4f5;
-    padding: 20px;
+    background: var(--bg-color);
+    padding: 15px;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+}
+.chord-box.tonic { background: var(--tonic-bg); color: var(--tonic-text); transform: scale(1.05); }
+.chord-box.tonic .degree { color: var(--text-muted); }
+#box-vii { grid-column: 2; }
+.degree { font-size: 13px; font-weight: bold; color: var(--text-muted); margin-bottom: 5px; }
+.chord { font-size: 24px; font-weight: bold; }
+.minor .chord { font-size: 20px; }
+.dim .chord { font-size: 18px; }
+
+/* Grid das Pentatônicas */
+.penta-container { display: flex; flex-direction: column; gap: 20px; }
+.penta-box { background: var(--bg-color); padding: 15px; border-radius: 8px; }
+
+/* Desenho Fixo do Braço da Guitarra */
+.fretboard {
+    background: var(--fretboard-bg);
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.string {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    position: relative;
+    height: 14px;
 }
-
-/* Destaque para a Tônica (Centro) */
-.chord-box.tonic {
-    background: #1a1a1a;
-    color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.string::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: var(--string-color);
+    top: 6px;
+    z-index: 1;
 }
-
-.chord-box.tonic .degree {
-    color: #a1a1aa;
+.space { width: 14px; }
+.dot {
+    width: 14px;
+    height: 14px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    z-index: 2;
 }
-
-/* O diminuto ocupa a coluna do meio na linha de baixo */
-#box-vii {
-    grid-column: 2; 
-}
-
-.degree {
-    font-size: 14px;
-    font-weight: bold;
-    color: #71717a;
-    margin-bottom: 8px;
-}
-
-.chord {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.minor .chord { font-size: 24px; }
-.dim .chord { font-size: 20px; }
+.tonic-dot { background: #e11d48; /* Vermelho para destacar a Tônica na 6ª corda */ }
