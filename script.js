@@ -481,12 +481,20 @@ document.querySelectorAll('.fretboard .dot').forEach((dot) => {
     dot.addEventListener('click', (e) => {
         e.stopPropagation();
         const stringEl = dot.closest('.string');
+        if (!stringEl) return;
+
         const isMajor = dot.closest('#fretboard-major') !== null;
         const currentField = harmonicFields[currentIndex];
         const startFret = isMajor ? currentField.pentaMaior : currentField.pentaMenor;
 
         // Determina a corda (6ª a 1ª)
-        let stringIndex = 5;
+        // string-1 = 1ª corda (e agudo -> openStringFrequencies[5] = 329.63 Hz)
+        // string-2 = 2ª corda (B -> openStringFrequencies[4] = 246.94 Hz)
+        // string-3 = 3ª corda (G -> openStringFrequencies[3] = 196.00 Hz)
+        // string-4 = 4ª corda (D -> openStringFrequencies[2] = 146.83 Hz)
+        // string-5 = 5ª corda (A -> openStringFrequencies[1] = 110.00 Hz)
+        // string-6 = 6ª corda (E grave -> openStringFrequencies[0] = 82.41 Hz)
+        let stringIndex = 0;
         if (stringEl.classList.contains('string-1')) stringIndex = 5;
         else if (stringEl.classList.contains('string-2')) stringIndex = 4;
         else if (stringEl.classList.contains('string-3')) stringIndex = 3;
@@ -494,8 +502,18 @@ document.querySelectorAll('.fretboard .dot').forEach((dot) => {
         else if (stringEl.classList.contains('string-5')) stringIndex = 1;
         else if (stringEl.classList.contains('string-6')) stringIndex = 0;
 
-        // Toca a nota
-        playGuitarString(stringIndex, startFret);
+        // Identifica em qual casa/coluna (0, 1, 2, 3) a bolinha se encontra
+        const fretOffset = Array.from(stringEl.children).indexOf(dot);
+        const actualFret = startFret + (fretOffset >= 0 ? fretOffset : 0);
+
+        // Feedback de animação ao clicar
+        dot.style.transform = 'scale(1.4)';
+        setTimeout(() => {
+            dot.style.transform = '';
+        }, 180);
+
+        // Toca a frequência exata da casa e corda
+        playGuitarString(stringIndex, actualFret);
     });
 });
 
@@ -504,3 +522,4 @@ document.querySelectorAll('.fretboard .dot').forEach((dot) => {
 // ==========================================================================
 initKeyPills();
 updateUI();
+
