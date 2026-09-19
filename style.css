@@ -1,128 +1,1029 @@
+/* ==========================================================================
+   CHORD CIRCLE - DESIGN SYSTEM & STYLES
+   ========================================================================== */
+
 :root {
-    --bg-color: #f4f4f5;
-    --panel-bg: #ffffff;
-    --text-main: #1a1a1a;
-    --text-muted: #71717a;
-    --tonic-bg: #1a1a1a;
-    --tonic-text: #ffffff;
-    --fretboard-bg: #e4e4e7;
-    --string-color: #a1a1aa;
+    /* Color Palette - Light Mode */
+    --bg-main: #f8fafc;
+    --bg-gradient: radial-gradient(circle at 50% 0%, #ede9fe 0%, #f1f5f9 60%, #e2e8f0 100%);
+    --panel-bg: rgba(255, 255, 255, 0.85);
+    --panel-border: rgba(226, 232, 240, 0.8);
+    --card-bg: #ffffff;
+    --card-hover-bg: #f8fafc;
+    --card-border: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    
+    /* Harmonic Accent Colors */
+    --color-tonic: #6366f1;
+    --color-tonic-glow: rgba(99, 102, 241, 0.25);
+    --color-tonic-bg: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --color-tonic-text: #ffffff;
+
+    --color-subdom: #0ea5e9;
+    --color-subdom-glow: rgba(14, 165, 233, 0.2);
+    --color-subdom-bg: rgba(14, 165, 233, 0.08);
+
+    --color-dom: #f59e0b;
+    --color-dom-glow: rgba(245, 158, 11, 0.2);
+    --color-dom-bg: rgba(245, 158, 11, 0.08);
+
+    --color-dim: #f43f5e;
+    --color-dim-glow: rgba(244, 63, 94, 0.2);
+    --color-dim-bg: rgba(244, 63, 94, 0.08);
+
+    /* Fretboard System */
+    --fretboard-bg: #1e293b;
+    --fretboard-border: #334155;
+    --fret-wire: #94a3b8;
+    --string-color: linear-gradient(180deg, #cbd5e1 0%, #64748b 100%);
+    --fret-dot-bg: #38bdf8;
+    --fret-tonic-dot: #f43f5e;
+
+    /* Shadows & Effects */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.12);
+    --glass-blur: blur(16px);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
 }
 
+/* ==========================================================================
+   DARK THEME PALETTE
+   ========================================================================== */
 .dark-theme {
-    --bg-color: #121212;
-    --panel-bg: #1e1e1e;
-    --text-main: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --tonic-bg: #f4f4f5;
-    --tonic-text: #1a1a1a;
-    --fretboard-bg: #27272a;
-    --string-color: #52525b;
+    --bg-main: #090d16;
+    --bg-gradient: radial-gradient(circle at 50% -10%, #1e1b4b 0%, #090d16 65%, #020617 100%);
+    --panel-bg: rgba(15, 23, 42, 0.75);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --card-bg: rgba(30, 41, 59, 0.6);
+    --card-hover-bg: rgba(51, 65, 85, 0.8);
+    --card-border: rgba(255, 255, 255, 0.07);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    --color-tonic-glow: rgba(99, 102, 241, 0.4);
+    --color-subdom-bg: rgba(14, 165, 233, 0.12);
+    --color-dom-bg: rgba(245, 158, 11, 0.12);
+    --color-dim-bg: rgba(244, 63, 94, 0.12);
+
+    --fretboard-bg: #0f172a;
+    --fretboard-border: #1e293b;
+    --fret-wire: #475569;
+
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background-color: var(--bg-color);
+    background: var(--bg-gradient);
+    background-color: var(--bg-main);
     color: var(--text-main);
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    overflow-x: hidden;
+    padding: 24px 16px;
+    transition: background 0.4s ease, color 0.3s ease;
 }
 
-#theme-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--panel-bg);
-    color: var(--text-main);
-    border: 1px solid var(--text-muted);
-    padding: 10px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+/* Ambient glow orbs in background */
+.ambient-glow {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    transition: opacity 0.5s ease;
+}
+.glow-1 {
+    top: -100px;
+    left: 20%;
+    background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+}
+.glow-2 {
+    bottom: -150px;
+    right: 15%;
+    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
 }
 
-.main-wrapper {
+.app-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
     display: flex;
-    gap: 30px;
-    max-width: 900px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ==========================================================================
+   HEADER & NAVIGATION BAR
+   ========================================================================== */
+.app-header {
+    background: var(--panel-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-lg);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--color-tonic-bg);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px var(--color-tonic-glow);
+}
+
+.brand-title {
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    display: block;
+    line-height: 1.2;
+}
+
+.brand-subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Key Pills Selector */
+.key-selector-nav {
+    flex: 1;
+    max-width: 560px;
+    overflow: hidden;
+}
+
+.key-pills-scroll {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 4px 2px;
+    scrollbar-width: none; /* Firefox */
+}
+.key-pills-scroll::-webkit-scrollbar {
+    display: none; /* Chrome / Safari */
+}
+
+.key-pill {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.key-pill:hover {
+    color: var(--text-main);
+    border-color: var(--color-tonic);
+    transform: translateY(-1px);
+}
+
+.key-pill.active {
+    background: var(--color-tonic-bg);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 3px 10px var(--color-tonic-glow);
+    transform: translateY(-1px) scale(1.05);
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.icon-button {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-button:hover {
+    border-color: var(--color-tonic);
+    color: var(--color-tonic);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   MAIN PANELS LAYOUT
+   ========================================================================== */
+.main-wrapper {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 20px;
+    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .panel {
     background: var(--panel-bg);
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    text-align: center;
-}
-
-h1 { font-size: 32px; margin: 0 0 5px 0; }
-h2 { font-size: 22px; margin: 0 0 5px 0; }
-h3 { font-size: 16px; margin-bottom: 15px; color: var(--text-main); }
-.instruction { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
-
-/* Grid */
-.harmonic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-.chord-box {
-    background: var(--bg-color);
-    padding: 15px;
-    border-radius: 8px;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
-    cursor: crosshair; /* Cursor muda para indicar que tem desenho ali */
+    gap: 20px;
     position: relative;
 }
-.chord-box.tonic { background: var(--tonic-bg); color: var(--tonic-text); transform: scale(1.05); }
-.chord-box.tonic .degree { color: var(--text-muted); }
-#box-vii { grid-column: 2; }
-.degree { font-size: 13px; font-weight: bold; color: var(--text-muted); margin-bottom: 5px; pointer-events: none; }
-.chord { font-size: 24px; font-weight: bold; pointer-events: none; }
-.minor .chord { font-size: 20px; }
-.dim .chord { font-size: 18px; }
 
-/* Pentatônicas */
-.penta-container { display: flex; flex-direction: column; gap: 20px; }
-.penta-box { background: var(--bg-color); padding: 15px; border-radius: 8px; }
-.fretboard { background: var(--fretboard-bg); padding: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 6px; }
-.string { display: flex; justify-content: space-between; align-items: center; position: relative; height: 14px; }
-.string::after { content: ''; position: absolute; width: 100%; height: 2px; background: var(--string-color); top: 6px; z-index: 1; }
-.space { width: 14px; }
-.dot { width: 14px; height: 14px; background: var(--text-muted); border-radius: 50%; z-index: 2; }
-.tonic-dot { background: #e11d48; }
+.panel-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
+.panel-subtext {
+    font-size: 13px;
+    color: var(--text-muted);
+}
 
-/* ===== BALÃOZINHO DO ACORDE (NOVO) ===== */
+/* ==========================================================================
+   KEY CONTROLS & HEADER
+   ========================================================================== */
+.key-control-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-arrow-btn {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-arrow-btn:hover {
+    background: var(--color-tonic-bg);
+    color: #ffffff;
+    border-color: transparent;
+    transform: scale(1.08);
+}
+
+.nav-arrow-btn:active {
+    transform: scale(0.92);
+}
+
+.current-key-display {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.key-badge-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.key-title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+#current-key {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
+}
+
+.relative-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-subdom-bg);
+    color: var(--color-subdom);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+/* ==========================================================================
+   HARMONIC GRID & CHORD CARDS
+   ========================================================================== */
+.harmonic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.chord-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease,
+                background-color 0.25s ease;
+}
+
+.chord-box:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-tonic);
+}
+
+.chord-box:active {
+    transform: scale(0.97);
+}
+
+.chord-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.role-pill {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    background: rgba(148, 163, 184, 0.12);
+}
+
+.degree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.chord-main {
+    text-align: center;
+    margin: 8px 0;
+}
+
+.chord {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    display: inline-block;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chord-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.audio-hint {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.chord-box:hover .audio-hint {
+    opacity: 1;
+    color: var(--text-muted);
+}
+
+/* Tonic highlight (Card I) */
+.chord-box.tonic {
+    background: var(--color-tonic-bg);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 8px 24px var(--color-tonic-glow);
+    transform: scale(1.03);
+}
+.chord-box.tonic:hover {
+    transform: scale(1.06) translateY(-4px);
+    box-shadow: 0 14px 30px var(--color-tonic-glow);
+}
+.chord-box.tonic .role-pill {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+.chord-box.tonic .degree {
+    color: rgba(255, 255, 255, 0.85);
+}
+.chord-box.tonic .chord {
+    color: #ffffff;
+}
+.chord-box.tonic .audio-hint {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Functional color accents */
+.chord-box.subdominant .role-pill,
+.chord-box.subdominant-min .role-pill {
+    color: var(--color-subdom);
+    background: var(--color-subdom-bg);
+}
+
+.chord-box.dominant .role-pill,
+.chord-box.dominant-min .role-pill {
+    color: var(--color-dom);
+    background: var(--color-dom-bg);
+}
+
+.chord-box.tonic-rel .role-pill {
+    color: #a855f7;
+    background: rgba(168, 85, 247, 0.12);
+}
+
+.chord-box.dim {
+    grid-column: 2; /* Centered in the third row */
+}
+.chord-box.dim .role-pill {
+    color: var(--color-dim);
+    background: var(--color-dim-bg);
+}
+
+/* Animação escalonada ao trocar de tom */
+.chord-swap-anim .chord {
+    animation: chordPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes chordPop {
+    0% { transform: scale(0.6); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   PENTATONIC SECTION & FRETBOARDS
+   ========================================================================== */
+.penta-title-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.penta-title-wrap h2 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.tuning-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(148, 163, 184, 0.12);
+    color: var(--text-muted);
+}
+
+.penta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.penta-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.penta-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: var(--shadow-md);
+}
+
+.penta-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.penta-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.penta-type-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+.penta-type-badge.major {
+    background: var(--color-tonic-glow);
+    color: var(--color-tonic);
+}
+.penta-type-badge.minor {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+}
+
+.penta-card-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.fret-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: var(--card-hover-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+}
+
+/* Fretboard Graphic */
+.fretboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fretboard-markers-top {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 0 4px;
+}
+
+.fretboard {
+    background: var(--fretboard-bg);
+    border: 1px solid var(--fretboard-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Background vertical fret dividers */
+.fretboard::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 25%;
+    width: 2px;
+    background: var(--fret-wire);
+    box-shadow: 1px 0 2px rgba(0,0,0,0.4);
+    z-index: 1;
+}
+.fretboard::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 2px;
+    background: var(--fret-wire);
+    box-shadow: 1px 0 2px rgba(0,0,0,0.4);
+    z-index: 1;
+}
+
+/* String layout */
+.string {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    position: relative;
+    height: 18px;
+    z-index: 2;
+}
+
+/* Metallic string with realistic gauge thickness */
+.string::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    background: var(--string-color);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    border-radius: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Corda 1 (e agudo) mais fina -> Corda 6 (E grave) mais grossa */
+.string-1::after { height: 1.2px; }
+.string-2::after { height: 1.6px; }
+.string-3::after { height: 2.0px; }
+.string-4::after { height: 2.4px; }
+.string-5::after { height: 2.9px; }
+.string-6::after { height: 3.5px; }
+
+.fret-space {
+    width: 100%;
+    height: 100%;
+}
+
+.dot {
+    width: 16px;
+    height: 16px;
+    background: var(--fret-dot-bg);
+    border-radius: 50%;
+    z-index: 3;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(56, 189, 248, 0.4);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.dot:hover {
+    transform: scale(1.3);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+}
+
+/* Tônica pulse */
+.dot.tonic-dot {
+    background: var(--fret-tonic-dot);
+    box-shadow: 0 0 10px rgba(244, 63, 94, 0.6);
+}
+
+.dot.tonic-dot:hover {
+    box-shadow: 0 0 14px rgba(244, 63, 94, 0.9);
+}
+
+.dot-pulse {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid var(--fret-tonic-dot);
+    animation: pulseRing 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    pointer-events: none;
+}
+
+@keyframes pulseRing {
+    0% { transform: scale(0.9); opacity: 0.9; }
+    80% { transform: scale(1.7); opacity: 0; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.app-footer {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.keyboard-hints {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.hint-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+kbd {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   CHORD TOOLTIP (GLASSMORPHIC FLOATING CARD)
+   ========================================================================== */
 .tooltip {
     position: absolute;
-    background: #1a1a1a;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    z-index: 1000;
     pointer-events: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    z-index: 100;
-    transition: opacity 0.1s;
+    width: 140px;
+    transform: translate(16px, 16px);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.tooltip.hidden { opacity: 0; visibility: hidden; }
-.tooltip-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; font-size: 16px; }
-#tt-fret { color: #a1a1aa; font-size: 14px; }
-.diagram-container { width: 100px; }
-.markers { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; color: #a1a1aa; height: 14px; }
-.diagram-grid { position: relative; height: 120px; background: #27272a; border-radius: 3px; }
-.v-lines, .h-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.v-lines { display: flex; justify-content: space-between; }
-.v-lines div { width: 2px; height: 100%; background: #52525b; }
-.h-lines { display: flex; flex-direction: column; justify-content: space-between; }
-.h-lines div { width: 100%; height: 2px; background: #52525b; }
-.diagram-grid::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #a1a1aa; z-index: 5; }
-.diagram-dots { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; }
+
+.tooltip.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(16px, 24px) scale(0.95);
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.tooltip-chord-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.tt-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+.tt-role-tag {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-subdom);
+    letter-spacing: 0.04em;
+}
+
+.tt-fret-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 600;
+}
+
+.diagram-container {
+    width: 100%;
+}
+
+.markers {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    height: 14px;
+}
+
+.diagram-grid {
+    position: relative;
+    height: 120px;
+    background: #1e293b;
+    border-radius: 4px;
+    border: 1px solid #334155;
+    overflow: hidden;
+}
+
+.v-lines, .h-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.v-lines {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+.v-lines div {
+    width: 1.5px;
+    height: 100%;
+    background: #475569;
+}
+
+.h-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.h-lines div {
+    width: 100%;
+    height: 1.5px;
+    background: #475569;
+}
+
+/* Nut (pestana superior grossa) */
+.diagram-grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3.5px;
+    background: #e2e8f0;
+    z-index: 5;
+}
+
+.diagram-dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
 .chord-dot {
     position: absolute;
-    width: 14px; height: 14px;
-    background: white; border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    background: #ffffff;
+    border-radius: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    animation: dotPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dotPop {
+    0% { transform: translate(-50%, -50%) scale(0); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.diagram-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-dim);
+}
+
+/* ==========================================================================
+   ENTRANCE ANIMATIONS
+   ========================================================================== */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLETS & MOBILE)
+   ========================================================================== */
+@media (max-width: 860px) {
+    .main-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .app-header {
+        flex-wrap: wrap;
+    }
+    .key-selector-nav {
+        order: 3;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 540px) {
+    body {
+        padding: 12px 8px;
+    }
+    .panel {
+        padding: 16px;
+    }
+    .harmonic-grid {
+        gap: 8px;
+    }
+    .chord-box {
+        padding: 10px 8px;
+        min-height: 90px;
+    }
+    .chord {
+        font-size: 20px;
+    }
+    .role-pill {
+        font-size: 8px;
+        padding: 1px 4px;
+    }
+    .degree {
+        font-size: 11px;
+    }
+    .keyboard-hints {
+        display: none;
+    }
 }

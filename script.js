@@ -1,20 +1,57 @@
-// O "Cérebro" dos acordes. 'x' = não toca, 0 = corda solta, número = casa
-// Ordem das cordas: [E grave, A, D, G, B, e agudo]
+/**
+ * Chord Circle - Motor de Harmonia, Pentatônicas e Síntese de Áudio
+ */
+
+// ==========================================================================
+// 1. DICIONÁRIO DE ACORDES & CAMPOS HARMÔNICOS
+// 'x' = corda muda, 0 = corda solta, número = casa
+// Ordem das cordas: [6ª (E grave), 5ª (A), 4ª (D), 3ª (G), 2ª (B), 1ª (e agudo)]
+// ==========================================================================
 const shapesDicionario = {
-    'C': ['x', 3, 2, 0, 1, 0], 'G': [3, 2, 0, 0, 0, 3], 'D': ['x', 'x', 0, 2, 3, 2],
-    'A': ['x', 0, 2, 2, 2, 0], 'E': [0, 2, 2, 1, 0, 0], 'B': ['x', 2, 4, 4, 4, 2],
-    'F#': [2, 4, 4, 3, 2, 2], 'Gb': [2, 4, 4, 3, 2, 2], 'Db': ['x', 4, 6, 6, 6, 4],
-    'Ab': [4, 6, 6, 5, 4, 4], 'Eb': ['x', 6, 8, 8, 8, 6], 'Bb': ['x', 1, 3, 3, 3, 1], 'F': [1, 3, 3, 2, 1, 1],
-    'Dm': ['x', 'x', 0, 2, 3, 1], 'Am': ['x', 0, 2, 2, 1, 0], 'Em': [0, 2, 2, 0, 0, 0],
-    'Bm': ['x', 2, 4, 4, 3, 2], 'F#m': [2, 4, 4, 2, 2, 2], 'C#m': ['x', 4, 6, 6, 5, 4],
-    'G#m': [4, 6, 6, 4, 4, 4], 'Ebm': ['x', 6, 8, 8, 7, 6], 'Bbm': ['x', 1, 3, 3, 2, 1],
-    'Fm': [1, 3, 3, 1, 1, 1], 'Cm': ['x', 3, 5, 5, 4, 3], 'Gm': [3, 5, 5, 3, 3, 3],
-    'D#m': ['x', 6, 8, 8, 7, 6], 'A#m': ['x', 1, 3, 3, 2, 1],
-    // Diminutos (usando shape m7b5 - Diatônico e altamente usável)
-    'B°': ['x', 2, 3, 2, 3, 'x'], 'F#°': [2, 'x', 2, 2, 1, 'x'], 'C#°': ['x', 4, 5, 4, 5, 'x'],
-    'G#°': [4, 'x', 4, 4, 3, 'x'], 'D#°': ['x', 6, 7, 6, 7, 'x'], 'A#°': [6, 'x', 6, 6, 5, 'x'],
-    'E#°': ['x', 8, 9, 8, 9, 'x'], 'C°': ['x', 3, 4, 3, 4, 'x'], 'G°': [3, 'x', 3, 3, 2, 'x'],
-    'D°': ['x', 5, 6, 5, 6, 'x'], 'A°': [5, 'x', 5, 5, 4, 'x'], 'E°': ['x', 7, 8, 7, 8, 'x']
+    // Acordes Maiores
+    'C': ['x', 3, 2, 0, 1, 0],
+    'G': [3, 2, 0, 0, 0, 3],
+    'D': ['x', 'x', 0, 2, 3, 2],
+    'A': ['x', 0, 2, 2, 2, 0],
+    'E': [0, 2, 2, 1, 0, 0],
+    'B': ['x', 2, 4, 4, 4, 2],
+    'F#': [2, 4, 4, 3, 2, 2],
+    'Gb': [2, 4, 4, 3, 2, 2],
+    'Db': ['x', 4, 6, 6, 6, 4],
+    'Ab': [4, 6, 6, 5, 4, 4],
+    'Eb': ['x', 6, 8, 8, 8, 6],
+    'Bb': ['x', 1, 3, 3, 3, 1],
+    'F': [1, 3, 3, 2, 1, 1],
+
+    // Acordes Menores
+    'Dm': ['x', 'x', 0, 2, 3, 1],
+    'Am': ['x', 0, 2, 2, 1, 0],
+    'Em': [0, 2, 2, 0, 0, 0],
+    'Bm': ['x', 2, 4, 4, 3, 2],
+    'F#m': [2, 4, 4, 2, 2, 2],
+    'C#m': ['x', 4, 6, 6, 5, 4],
+    'G#m': [4, 6, 6, 4, 4, 4],
+    'Ebm': ['x', 6, 8, 8, 7, 6],
+    'Bbm': ['x', 1, 3, 3, 2, 1],
+    'Fm': [1, 3, 3, 1, 1, 1],
+    'Cm': ['x', 3, 5, 5, 4, 3],
+    'Gm': [3, 5, 5, 3, 3, 3],
+    'D#m': ['x', 6, 8, 8, 7, 6],
+    'A#m': ['x', 1, 3, 3, 2, 1],
+
+    // Diminutos / Meio-diminutos (m7b5)
+    'B°': ['x', 2, 3, 2, 3, 'x'],
+    'F#°': [2, 'x', 2, 2, 1, 'x'],
+    'C#°': ['x', 4, 5, 4, 5, 'x'],
+    'G#°': [4, 'x', 4, 4, 3, 'x'],
+    'D#°': ['x', 6, 7, 6, 7, 'x'],
+    'A#°': [6, 'x', 6, 6, 5, 'x'],
+    'E#°': ['x', 8, 9, 8, 9, 'x'],
+    'C°': ['x', 3, 4, 3, 4, 'x'],
+    'G°': [3, 'x', 3, 3, 2, 'x'],
+    'D°': ['x', 5, 6, 5, 6, 'x'],
+    'A°': [5, 'x', 5, 5, 4, 'x'],
+    'E°': ['x', 7, 8, 7, 8, 'x']
 };
 
 const harmonicFields = [
@@ -32,86 +69,384 @@ const harmonicFields = [
     { key: 'F', iv: 'Bb', i: 'F', v: 'C', ii: 'Gm', vi: 'Dm', iii: 'Am', vii: 'E°', pentaMaior: 1, pentaMenor: 10 }
 ];
 
-let currentIndex = 0; 
-const tooltip = document.getElementById('chord-tooltip');
+let currentIndex = 0;
+let soundEnabled = true;
 
-function updateUI() {
-    const field = harmonicFields[currentIndex];
-    document.getElementById('current-key').textContent = `Tom: ${field.key}`;
-    document.querySelector('#box-iv .chord').textContent = field.iv;
-    document.querySelector('#box-i .chord').textContent = field.i;
-    document.querySelector('#box-v .chord').textContent = field.v;
-    document.querySelector('#box-ii .chord').textContent = field.ii;
-    document.querySelector('#box-vi .chord').textContent = field.vi;
-    document.querySelector('#box-iii .chord').textContent = field.iii;
-    document.querySelector('#box-vii .chord').textContent = field.vii;
-    document.getElementById('penta-major-title').textContent = `Maior (${field.i}) - Casa ${field.pentaMaior}`;
-    document.getElementById('penta-minor-title').textContent = `Menor (${field.vi}) - Casa ${field.pentaMenor}`;
+// ==========================================================================
+// 2. MOTOR DE SÍNTESE DE ÁUDIO (WEB AUDIO API)
+// Plucked acoustic string synthesis
+// ==========================================================================
+const openStringFrequencies = [
+    82.41,  // E2 (6ª corda)
+    110.00, // A2 (5ª corda)
+    146.83, // D3 (4ª corda)
+    196.00, // G3 (3ª corda)
+    246.94, // B3 (2ª corda)
+    329.63  // E4 (1ª corda)
+];
+
+let audioCtx = null;
+
+function getAudioContext() {
+    if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+        }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
 }
 
+/**
+ * Toca uma nota dedilhada de corda com envelope e filtro harmônico
+ */
+function playGuitarString(stringIndex, fret, delayTime = 0) {
+    if (!soundEnabled) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    if (fret === 'x') return; // Corda abafada não toca som
+
+    const baseFreq = openStringFrequencies[stringIndex];
+    const fretNum = typeof fret === 'number' ? fret : 0;
+    const noteFreq = baseFreq * Math.pow(2, fretNum / 12);
+
+    const now = ctx.currentTime + delayTime;
+
+    // Osciladores combinados para timbre de corda rica
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'triangle';
+    osc2.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(noteFreq, now);
+    osc2.frequency.setValueAtTime(noteFreq * 2, now); // Harmônico superior sutil
+
+    // Filtro Passa-Baixas para simular o corpo de madeira
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(noteFreq * 4.5, now);
+    filter.frequency.exponentialRampToValueAtTime(noteFreq * 1.2, now + 1.2);
+
+    // Ganho e Envelope de ataque percussivo e decaimento
+    const gainNode = ctx.createGain();
+    const gainOsc2 = ctx.createGain();
+    gainOsc2.gain.value = 0.15; // Volume mais baixo para o harmônico agudo
+
+    gainNode.gain.setValueAtTime(0.001, now);
+    gainNode.gain.linearRampToValueAtTime(0.22, now + 0.008); // Ataque rápido do toque
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 1.8); // Sustentação e decaimento suave
+
+    // Conexões
+    osc1.connect(filter);
+    osc2.connect(gainOsc2);
+    gainOsc2.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    // Início e término
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 2.0);
+    osc2.stop(now + 2.0);
+}
+
+/**
+ * Toca o acorde completo dedilhado (strum)
+ */
+function strumChord(chordName) {
+    const shape = shapesDicionario[chordName];
+    if (!shape) return;
+
+    getAudioContext();
+
+    // Dedilha corda por corda com pequeno intervalo realista (~32ms)
+    let strumDelay = 0;
+    shape.forEach((fret, stringIdx) => {
+        if (fret !== 'x') {
+            playGuitarString(stringIdx, fret, strumDelay);
+            strumDelay += 0.032;
+        }
+    });
+}
+
+// ==========================================================================
+// 3. SELETOR RÁPIDO DE TONS (PILLS NAVIGATION)
+// ==========================================================================
+const keyPillsContainer = document.getElementById('key-pills-container');
+
+function initKeyPills() {
+    keyPillsContainer.innerHTML = '';
+    harmonicFields.forEach((field, index) => {
+        const pill = document.createElement('button');
+        pill.className = `key-pill ${index === currentIndex ? 'active' : ''}`;
+        pill.textContent = field.key;
+        pill.setAttribute('aria-label', `Tom de ${field.key}`);
+        pill.addEventListener('click', () => {
+            if (currentIndex !== index) {
+                setKey(index);
+            }
+        });
+        keyPillsContainer.appendChild(pill);
+    });
+}
+
+function updateKeyPills() {
+    const pills = keyPillsContainer.querySelectorAll('.key-pill');
+    pills.forEach((pill, idx) => {
+        if (idx === currentIndex) {
+            pill.classList.add('active');
+            pill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+            pill.classList.remove('active');
+        }
+    });
+}
+
+// ==========================================================================
+// 4. ATUALIZAÇÃO DA INTERFACE & ANIMAÇÕES
+// ==========================================================================
+const currentKeyEl = document.getElementById('current-key');
+const relativeBadgeEl = document.getElementById('relative-key-badge');
+const pentaMajorTitleEl = document.getElementById('penta-major-title');
+const pentaMajorFretEl = document.getElementById('penta-major-fret-badge');
+const pentaMinorTitleEl = document.getElementById('penta-minor-title');
+const pentaMinorFretEl = document.getElementById('penta-minor-fret-badge');
+const harmonicGridEl = document.getElementById('harmonic-grid');
+
+function setKey(index) {
+    currentIndex = index;
+    updateUI(true);
+    updateKeyPills();
+}
+
+function updateUI(animate = false) {
+    const field = harmonicFields[currentIndex];
+
+    // Atualiza cabeçalho
+    currentKeyEl.textContent = `Tom: ${field.key}`;
+    relativeBadgeEl.textContent = `Relativo: ${field.vi}`;
+
+    // Atualiza os nomes dos 7 acordes
+    const chordMap = {
+        '#box-iv .chord': field.iv,
+        '#box-i .chord': field.i,
+        '#box-v .chord': field.v,
+        '#box-ii .chord': field.ii,
+        '#box-vi .chord': field.vi,
+        '#box-iii .chord': field.iii,
+        '#box-vii .chord': field.vii
+    };
+
+    for (const [selector, chordName] of Object.entries(chordMap)) {
+        const el = document.querySelector(selector);
+        if (el) el.textContent = chordName;
+    }
+
+    // Atualiza títulos e badges das pentatônicas
+    pentaMajorTitleEl.textContent = `${field.i} Maior`;
+    pentaMajorFretEl.textContent = `Casa ${field.pentaMaior}`;
+    pentaMinorTitleEl.textContent = `${field.vi} Menor`;
+    pentaMinorFretEl.textContent = `Casa ${field.pentaMenor}`;
+
+    // Atualiza os marcadores de casas nos gráficos de pentatônica
+    updateFretboardMarkers('fretboard-major', field.pentaMaior);
+    updateFretboardMarkers('fretboard-minor', field.pentaMenor);
+
+    // Efeito de animação escalonada
+    if (animate) {
+        harmonicGridEl.classList.remove('chord-swap-anim');
+        void harmonicGridEl.offsetWidth; // Trigger reflow
+        harmonicGridEl.classList.add('chord-swap-anim');
+    }
+}
+
+function updateFretboardMarkers(containerId, startFret) {
+    const parentCard = document.getElementById(containerId)?.closest('.penta-card');
+    if (!parentCard) return;
+    const markersHeader = parentCard.querySelector('.fretboard-markers-top');
+    if (markersHeader) {
+        markersHeader.innerHTML = `
+            <span>Casa ${startFret}</span>
+            <span>Casa ${startFret + 1}</span>
+            <span>Casa ${startFret + 2}</span>
+            <span>Casa ${startFret + 3}</span>
+        `;
+    }
+}
+
+// ==========================================================================
+// 5. CONTROLES DE NAVEGAÇÃO
+// ==========================================================================
+document.getElementById('prev-key-btn').addEventListener('click', () => {
+    const newIndex = (currentIndex - 1 + harmonicFields.length) % harmonicFields.length;
+    setKey(newIndex);
+});
+
+document.getElementById('next-key-btn').addEventListener('click', () => {
+    const newIndex = (currentIndex + 1) % harmonicFields.length;
+    setKey(newIndex);
+});
+
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % harmonicFields.length; updateUI(); } 
-    else if (event.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + harmonicFields.length) % harmonicFields.length; updateUI(); }
+    if (event.key === 'ArrowRight') {
+        const newIndex = (currentIndex + 1) % harmonicFields.length;
+        setKey(newIndex);
+    } else if (event.key === 'ArrowLeft') {
+        const newIndex = (currentIndex - 1 + harmonicFields.length) % harmonicFields.length;
+        setKey(newIndex);
+    } else if (event.code === 'Space') {
+        event.preventDefault();
+        const tonicChord = harmonicFields[currentIndex].i;
+        strumChord(tonicChord);
+    } else if (event.key.toLowerCase() === 'm') {
+        toggleSound();
+    }
 });
 
+// Suporte a gestos touch swipe em telas móveis
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, { passive: true });
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    if (touchEndX < touchStartX - swipeThreshold) {
+        // Swipe esquerda -> Próximo tom
+        setKey((currentIndex + 1) % harmonicFields.length);
+    } else if (touchEndX > touchStartX + swipeThreshold) {
+        // Swipe direita -> Tom anterior
+        setKey((currentIndex - 1 + harmonicFields.length) % harmonicFields.length);
+    }
+}
+
+// ==========================================================================
+// 6. TOGGLE DE TEMA & SOM
+// ==========================================================================
 const themeToggle = document.getElementById('theme-toggle');
+const iconMoon = themeToggle.querySelector('.icon-moon');
+const iconSun = themeToggle.querySelector('.icon-sun');
+
+// Carrega tema salvo se existir
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.body.classList.add('dark-theme');
+    iconMoon.classList.add('hidden');
+    iconSun.classList.remove('hidden');
+}
+
 themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
-    themeToggle.textContent = document.body.classList.contains('dark-theme') ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+    const isDark = document.body.classList.toggle('dark-theme');
+    if (isDark) {
+        iconMoon.classList.add('hidden');
+        iconSun.classList.remove('hidden');
+    } else {
+        iconMoon.classList.remove('hidden');
+        iconSun.classList.add('hidden');
+    }
 });
 
-// === LÓGICA DO BALÃOZINHO ===
-document.querySelectorAll('.chord-box').forEach(box => {
-    box.addEventListener('mouseenter', (e) => {
-        const chordName = box.querySelector('.chord').textContent;
-        const shape = shapesDicionario[chordName];
-        if(!shape) return;
+const soundToggle = document.getElementById('sound-toggle');
+const iconSoundOn = soundToggle.querySelector('.icon-sound-on');
+const iconSoundOff = soundToggle.querySelector('.icon-sound-off');
 
-        document.getElementById('tt-name').textContent = chordName;
-        
-        // Define qual casa mostrar
-        const frets = shape.filter(s => s !== 'x' && s !== 0);
-        const minFret = frets.length > 0 ? Math.min(...frets) : 1;
-        const maxFret = frets.length > 0 ? Math.max(...frets) : 4;
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    if (soundEnabled) {
+        iconSoundOn.classList.remove('hidden');
+        iconSoundOff.classList.add('hidden');
+    } else {
+        iconSoundOn.classList.add('hidden');
+        iconSoundOff.classList.remove('hidden');
+    }
+}
+
+soundToggle.addEventListener('click', toggleSound);
+
+// ==========================================================================
+// 7. BALÃOZINHO / TOOLTIP DE DIAGRAMA DO ACORDE (COM BOUNDARY DETECTION)
+// ==========================================================================
+const tooltip = document.getElementById('chord-tooltip');
+const ttName = document.getElementById('tt-name');
+const ttRole = document.getElementById('tt-role');
+const ttFret = document.getElementById('tt-fret');
+const ttMarkers = document.getElementById('tt-markers');
+const ttDots = document.getElementById('tt-dots');
+
+document.querySelectorAll('.chord-box').forEach(box => {
+    // Clique toca o acorde
+    box.addEventListener('click', () => {
+        const chordName = box.querySelector('.chord').textContent.trim();
+        strumChord(chordName);
+    });
+
+    // Hover mostra diagrama detalhado
+    box.addEventListener('mouseenter', (e) => {
+        const chordName = box.querySelector('.chord').textContent.trim();
+        const roleName = box.getAttribute('data-role') || '';
+        const shape = shapesDicionario[chordName];
+        if (!shape) return;
+
+        ttName.textContent = chordName;
+        ttRole.textContent = roleName;
+
+        // Determina a casa inicial do diagrama
+        const numericFrets = shape.filter(s => typeof s === 'number' && s > 0);
+        const minFret = numericFrets.length > 0 ? Math.min(...numericFrets) : 1;
+        const maxFret = numericFrets.length > 0 ? Math.max(...numericFrets) : 4;
         const startFret = maxFret > 4 ? minFret : 1;
 
-        document.getElementById('tt-fret').textContent = startFret > 1 ? `${startFret}ª Casa` : '';
+        ttFret.textContent = startFret > 1 ? `${startFret}ª Casa` : 'Pestana/Soltas';
 
-        // Limpa desenhos antigos
-        const markers = document.getElementById('tt-markers');
-        const dotsContainer = document.getElementById('tt-dots');
-        markers.innerHTML = ''; dotsContainer.innerHTML = '';
+        // Limpa desenhos anteriores
+        ttMarkers.innerHTML = '';
+        ttDots.innerHTML = '';
 
-        // Desenha corda por corda
+        // Renderiza cada corda no diagrama
         shape.forEach((fret, index) => {
-            const leftPos = index * 20; // 0, 20, 40, 60, 80, 100%
+            const leftPos = (index / 5) * 100; // 0% a 100%
+
+            // Marcador superior (X, O ou vazio)
             const markerSpan = document.createElement('span');
-            markerSpan.style.width = '14px'; markerSpan.style.textAlign = 'center';
+            markerSpan.style.width = '14px';
+            markerSpan.style.textAlign = 'center';
 
             if (fret === 'x') {
-                markerSpan.textContent = 'X';
+                markerSpan.textContent = '✕';
+                markerSpan.style.color = '#ef4444';
             } else if (fret === 0) {
-                markerSpan.textContent = 'O';
+                markerSpan.textContent = '○';
+                markerSpan.style.color = '#38bdf8';
             } else {
-                // Posiciona a bolinha no espaço correto
+                markerSpan.textContent = '';
+                // Adiciona a bolinha na casa correspondente
                 const dot = document.createElement('div');
                 dot.className = 'chord-dot';
                 dot.style.left = `${leftPos}%`;
-                // Cálculo para centralizar a bolinha entre os trastes (cada traste tem 25% de altura)
+                
                 const relativeFret = fret - startFret;
-                dot.style.top = `${(relativeFret * 25) + 12.5}%`; 
-                dotsContainer.appendChild(dot);
+                // Centraliza no traste (4 casas = 25% cada)
+                dot.style.top = `${(relativeFret * 25) + 12.5}%`;
+                ttDots.appendChild(dot);
             }
-            markers.appendChild(markerSpan);
+            ttMarkers.appendChild(markerSpan);
         });
 
         tooltip.classList.remove('hidden');
+        positionTooltip(e);
     });
 
     box.addEventListener('mousemove', (e) => {
-        // O balão segue o mouse. Os +15 dão um pequeno espaço para não cobrir a seta
-        tooltip.style.left = `${e.pageX + 15}px`;
-        tooltip.style.top = `${e.pageY + 15}px`;
+        positionTooltip(e);
     });
 
     box.addEventListener('mouseleave', () => {
@@ -119,4 +454,53 @@ document.querySelectorAll('.chord-box').forEach(box => {
     });
 });
 
+function positionTooltip(e) {
+    const tooltipWidth = 160;
+    const tooltipHeight = 220;
+    const padding = 15;
+
+    let left = e.pageX + padding;
+    let top = e.pageY + padding;
+
+    // Se estiver muito perto da borda direita da janela, reposiciona à esquerda do cursor
+    if (left + tooltipWidth > window.innerWidth + window.scrollX - 10) {
+        left = e.pageX - tooltipWidth - padding;
+    }
+
+    // Se estiver muito perto do final da tela, sobe o balão
+    if (top + tooltipHeight > window.innerHeight + window.scrollY - 10) {
+        top = e.pageY - tooltipHeight - padding;
+    }
+
+    tooltip.style.left = `${Math.max(10, left)}px`;
+    tooltip.style.top = `${Math.max(10, top)}px`;
+}
+
+// Interatividade com as bolinhas da escala pentatônica
+document.querySelectorAll('.fretboard .dot').forEach((dot) => {
+    dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const stringEl = dot.closest('.string');
+        const isMajor = dot.closest('#fretboard-major') !== null;
+        const currentField = harmonicFields[currentIndex];
+        const startFret = isMajor ? currentField.pentaMaior : currentField.pentaMenor;
+
+        // Determina a corda (6ª a 1ª)
+        let stringIndex = 5;
+        if (stringEl.classList.contains('string-1')) stringIndex = 5;
+        else if (stringEl.classList.contains('string-2')) stringIndex = 4;
+        else if (stringEl.classList.contains('string-3')) stringIndex = 3;
+        else if (stringEl.classList.contains('string-4')) stringIndex = 2;
+        else if (stringEl.classList.contains('string-5')) stringIndex = 1;
+        else if (stringEl.classList.contains('string-6')) stringIndex = 0;
+
+        // Toca a nota
+        playGuitarString(stringIndex, startFret);
+    });
+});
+
+// ==========================================================================
+// 8. INICIALIZAÇÃO
+// ==========================================================================
+initKeyPills();
 updateUI();

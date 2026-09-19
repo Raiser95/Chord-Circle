@@ -3,69 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Musical</title>
+    <title>Chord Circle | Campo Harmônico & Pentatônicas</title>
+    <meta name="description" content="Visualizador interativo de Campo Harmônico, Dicionário de Acordes e Escalas Pentatônicas para violão e guitarra.">
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="theme-toggle">🌙 Modo Escuro</button>
+    <!-- Background Ambient Glow -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
 
-    <div class="main-wrapper">
-        <div class="panel chord-panel">
-            <header>
-                <h1 id="current-key">Tom: C</h1>
-                <p class="instruction">Use as setas &larr; e &rarr; para trocar</p>
-            </header>
-
-            <div class="harmonic-grid">
-                <div class="chord-box" id="box-iv"><span class="degree">IV</span><span class="chord">F</span></div>
-                <div class="chord-box tonic" id="box-i"><span class="degree">I</span><span class="chord">C</span></div>
-                <div class="chord-box" id="box-v"><span class="degree">V</span><span class="chord">G</span></div>
-                
-                <div class="chord-box minor" id="box-ii"><span class="degree">ii</span><span class="chord">Dm</span></div>
-                <div class="chord-box minor" id="box-vi"><span class="degree">vi</span><span class="chord">Am</span></div>
-                <div class="chord-box minor" id="box-iii"><span class="degree">iii</span><span class="chord">Em</span></div>
-
-                <div class="chord-box dim" id="box-vii"><span class="degree">vii°</span><span class="chord">B°</span></div>
-            </div>
-        </div>
-
-        <div class="panel penta-panel">
-            <h2>Pentatônicas (Shape 1)</h2>
-            <p class="instruction">Tônica na 6ª Corda</p>
-
-            <div class="penta-container">
-                <div class="penta-box">
-                    <h3 id="penta-major-title">Maior (C) - Casa 8</h3>
-                    <div class="fretboard">
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
-                        <div class="string tonic-string"><div class="dot tonic-dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
-                    </div>
+    <div class="app-container">
+        <!-- Top Bar / Navigation -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
                 </div>
-                <div class="penta-box">
-                    <h3 id="penta-minor-title">Menor (Am) - Casa 5</h3>
-                    <div class="fretboard">
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
-                        <div class="string"><div class="dot"></div><div class="space"></div><div class="dot"></div><div class="space"></div></div>
-                        <div class="string tonic-string"><div class="dot tonic-dot"></div><div class="space"></div><div class="space"></div><div class="dot"></div></div>
-                    </div>
+                <div class="brand-text">
+                    <span class="brand-title">Chord Circle</span>
+                    <span class="brand-subtitle">Teoria & Harmonia</span>
                 </div>
             </div>
-        </div>
+
+            <!-- Quick Circle of Fifths Key Selector -->
+            <nav class="key-selector-nav" aria-label="Seletor de Tom">
+                <div class="key-pills-scroll" id="key-pills-container">
+                    <!-- Gerado dinamicamente via script.js -->
+                </div>
+            </nav>
+
+            <div class="header-actions">
+                <button id="sound-toggle" class="icon-button" title="Ativar/Desativar Som" aria-label="Alternar Som">
+                    <svg class="icon-sound-on" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.08"></path>
+                    </svg>
+                    <svg class="icon-sound-off hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                </button>
+
+                <button id="theme-toggle" class="icon-button" title="Alternar Tema (Claro/Escuro)" aria-label="Alternar Tema">
+                    <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icon-sun hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="main-wrapper">
+            <!-- Harmonic Field Panel -->
+            <section class="panel chord-panel">
+                <div class="panel-header">
+                    <div class="key-control-bar">
+                        <button id="prev-key-btn" class="nav-arrow-btn" title="Tom anterior (Seta Esquerda)" aria-label="Tom anterior">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        
+                        <div class="current-key-display">
+                            <span class="key-badge-label">Tonalidade</span>
+                            <div class="key-title-wrap">
+                                <h1 id="current-key">Tom: C</h1>
+                                <span id="relative-key-badge" class="relative-badge">Relativo: Am</span>
+                            </div>
+                        </div>
+
+                        <button id="next-key-btn" class="nav-arrow-btn" title="Próximo tom (Seta Direita)" aria-label="Próximo tom">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="panel-subtext">Passe o mouse para ver o diagrama ou clique para ouvir o acorde.</p>
+                </div>
+
+                <!-- Grid Harmônico dos 7 Graus -->
+                <div class="harmonic-grid" id="harmonic-grid">
+                    <!-- Linha 1: Maiores -->
+                    <div class="chord-box subdominant" id="box-iv" data-role="Subdominante">
+                        <div class="chord-top">
+                            <span class="role-pill">Subdominante</span>
+                            <span class="degree">IV</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">F</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="chord-box tonic" id="box-i" data-role="Tônica">
+                        <div class="chord-top">
+                            <span class="role-pill">Tônica</span>
+                            <span class="degree">I</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">C</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="chord-box dominant" id="box-v" data-role="Dominante">
+                        <div class="chord-top">
+                            <span class="role-pill">Dominante</span>
+                            <span class="degree">V</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">G</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Linha 2: Menores -->
+                    <div class="chord-box minor subdominant-min" id="box-ii" data-role="Subdominante">
+                        <div class="chord-top">
+                            <span class="role-pill">Subdominante</span>
+                            <span class="degree">ii</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">Dm</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="chord-box minor tonic-rel" id="box-vi" data-role="Relativo Menor">
+                        <div class="chord-top">
+                            <span class="role-pill">Relativo Menor</span>
+                            <span class="degree">vi</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">Am</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="chord-box minor dominant-min" id="box-iii" data-role="Mediante">
+                        <div class="chord-top">
+                            <span class="role-pill">Mediante</span>
+                            <span class="degree">iii</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">Em</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Linha 3: Diminuto -->
+                    <div class="chord-box dim" id="box-vii" data-role="Sensível">
+                        <div class="chord-top">
+                            <span class="role-pill">Sensível</span>
+                            <span class="degree">vii°</span>
+                        </div>
+                        <div class="chord-main">
+                            <span class="chord">B°</span>
+                        </div>
+                        <div class="chord-footer">
+                            <span class="audio-hint">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+                                Ouvir
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pentatonic Scales Panel -->
+            <section class="panel penta-panel">
+                <div class="panel-header">
+                    <div class="penta-title-wrap">
+                        <h2>Pentatônicas (Shape 1)</h2>
+                        <span class="tuning-badge">Tônica na 6ª Corda (Mi)</span>
+                    </div>
+                    <p class="panel-subtext">Desenho do braço da guitarra para improvisação e solos.</p>
+                </div>
+
+                <div class="penta-container">
+                    <!-- Pentatônica Maior -->
+                    <div class="penta-card">
+                        <div class="penta-card-header">
+                            <div class="penta-info">
+                                <span class="penta-type-badge major">Maior</span>
+                                <h3 id="penta-major-title">C Maior</h3>
+                            </div>
+                            <span id="penta-major-fret-badge" class="fret-badge">Casa 8</span>
+                        </div>
+
+                        <div class="fretboard-wrapper">
+                            <div class="fretboard-markers-top">
+                                <span>Casa 1</span><span>Casa 2</span><span>Casa 3</span><span>Casa 4</span>
+                            </div>
+                            <div class="fretboard" id="fretboard-major">
+                                <!-- Strings (da 1ª corda e agudo até 6ª corda E grave) -->
+                                <div class="string string-1"><div class="dot"></div><div class="fret-space"></div><div class="fret-space"></div><div class="dot"></div></div>
+                                <div class="string string-2"><div class="dot"></div><div class="fret-space"></div><div class="fret-space"></div><div class="dot"></div></div>
+                                <div class="string string-3"><div class="dot"></div><div class="fret-space"></div><div class="dot"></div><div class="fret-space"></div></div>
+                                <div class="string string-4"><div class="dot"></div><div class="fret-space"></div><div class="dot"></div><div class="fret-space"></div></div>
+                                <div class="string string-5"><div class="dot"></div><div class="fret-space"></div><div class="dot"></div><div class="fret-space"></div></div>
+                                <div class="string string-6 tonic-string"><div class="dot tonic-dot" title="Tônica"><span class="dot-pulse"></span></div><div class="fret-space"></div><div class="fret-space"></div><div class="dot"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pentatônica Menor -->
+                    <div class="penta-card">
+                        <div class="penta-card-header">
+                            <div class="penta-info">
+                                <span class="penta-type-badge minor">Menor Relativa</span>
+                                <h3 id="penta-minor-title">Am Menor</h3>
+                            </div>
+                            <span id="penta-minor-fret-badge" class="fret-badge">Casa 5</span>
+                        </div>
+
+                        <div class="fretboard-wrapper">
+                            <div class="fretboard-markers-top">
+                                <span>Casa 1</span><span>Casa 2</span><span>Casa 3</span><span>Casa 4</span>
+                            </div>
+                            <div class="fretboard" id="fretboard-minor">
+                                <!-- Strings -->
+                                <div class="string string-1"><div class="dot"></div><div class="fret-space"></div><div class="fret-space"></div><div class="dot"></div></div>
+                                <div class="string string-2"><div class="dot"></div><div class="fret-space"></div><div class="fret-space"></div><div class="dot"></div></div>
+                                <div class="string string-3"><div class="dot"></div><div class="fret-space"></div><div class="dot"></div><div class="fret-space"></div></div>
+                                <div class="string string-4"><div class="dot"></div><div class="fret-space"></div><div class="dot"></div><div class="fret-space"></div></div>
+                                <div class="string string-5"><div class="dot"></div><div class="fret-space"></div><div class="dot"></div><div class="fret-space"></div></div>
+                                <div class="string string-6 tonic-string"><div class="dot tonic-dot" title="Tônica"><span class="dot-pulse"></span></div><div class="fret-space"></div><div class="fret-space"></div><div class="dot"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Floating Footer Help -->
+        <footer class="app-footer">
+            <div class="keyboard-hints">
+                <span class="hint-item"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Alternar Tonalidade</span>
+                <span class="hint-item"><kbd>Espaço</kbd> ou <kbd>Clique</kbd> Tocar Acorde Tônica</span>
+                <span class="hint-item"><kbd>M</kbd> Mudo / Som</span>
+            </div>
+        </footer>
     </div>
 
-    <!-- O Balãozinho Mágico do Acorde (Fica escondido) -->
-    <div id="chord-tooltip" class="tooltip hidden">
+    <!-- Tooltip de Diagrama de Acorde Flutuante com Glassmorphism -->
+    <div id="chord-tooltip" class="tooltip hidden" role="tooltip" aria-hidden="true">
         <div class="tooltip-header">
-            <span id="tt-name">C</span>
-            <span id="tt-fret"></span>
+            <div class="tooltip-chord-info">
+                <span id="tt-name" class="tt-title">C</span>
+                <span id="tt-role" class="tt-role-tag">Tônica</span>
+            </div>
+            <span id="tt-fret" class="tt-fret-tag">1ª Casa</span>
         </div>
+        
         <div class="diagram-container">
             <div id="tt-markers" class="markers"></div>
             <div class="diagram-grid">
@@ -76,6 +316,9 @@
                     <div></div><div></div><div></div><div></div><div></div>
                 </div>
                 <div id="tt-dots" class="diagram-dots"></div>
+            </div>
+            <div class="diagram-footer">
+                <span>E</span><span>A</span><span>D</span><span>G</span><span>B</span><span>e</span>
             </div>
         </div>
     </div>
